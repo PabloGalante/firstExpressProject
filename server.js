@@ -23,7 +23,7 @@ app.get('/api/quotes', (req, res) => {
     const filterQuotes = quotes.filter(author => {
       return author.person === req.query.person;
     });
-    
+
     if (req.query.person) {
       res.send({ quotes: filterQuotes });
     } else if(req.query.person == '') {
@@ -31,4 +31,14 @@ app.get('/api/quotes', (req, res) => {
     } else {
         res.send({ quotes: quotes });
       }
+});
+
+app.post('/api/quotes', (req, res) => {
+    if(!(req.query.quote && req.query.person)) {
+        res.status(400).send();
+    } else {
+        const newObject = {quote: req.query.quote, person: req.query.person};
+        quotes.push(newObject);
+        res.send({quote: newObject});
+    }
 });
