@@ -8,3 +8,27 @@ const PORT = process.env.PORT || 4001;
 
 app.use(express.static('public'));
 
+app.listen(PORT, () => {
+    console.log('Server running');
+});
+
+app.get('/api/quotes/random', (req, res) => {
+    const randomQuoteObject = {
+        quote: getRandomElement(quotes)
+    };
+    res.send(randomQuoteObject);
+});
+
+app.get('/api/quotes', (req, res) => {
+    const filterQuotes = quotes.filter(author => {
+      return author.person === req.query.person;
+    });
+    
+    if (req.query.person) {
+      res.send({ quotes: filterQuotes });
+    } else if(req.query.person == '') {
+      res.send({ quotes: [] });
+    } else {
+        res.send({ quotes: quotes });
+      }
+});
